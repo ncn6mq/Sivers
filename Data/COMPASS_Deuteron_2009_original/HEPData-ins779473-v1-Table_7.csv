@@ -1,0 +1,36 @@
+#: table_doi: 10.17182/hepdata.48532.v1/t7
+#: name: Table 7
+#: description: The Collins and Sivers asymmetry as a function of X for 'ALL' positive kaons from the 2003-2004 data.. Errors are statistical only.
+
+#: data_file: Table7.yaml
+#: keyword reactions: MU+ DEUT --> MU+ K+ X
+#: keyword observables: ASYM
+#: keyword phrases: Inclusive | Asymmetry Measurement | Strange production | Muon production | Neutral Current | Deep Inelastic Scattering
+#: PLAB [GeV],,,160.0
+#: RE,,,MU+ DEUT --> MU+ K+ X
+#: SYS,,,Systematic errors are estimated to be considerably smaller than statistical errors.
+X,X LOW,X HIGH,MEAN(NAME=Q**2) [GEV**2],MEAN(NAME=Y),MEAN(NAME=Z),MEAN(NAME=PT) [GEV],ASYM(C=COLLINS),error +,error -
+0.006452,0.003,0.008,1.24,0.65,0.3,0.57,0.0194,0.0497,-0.0497
+0.01054,0.008,0.013,1.49,0.48,0.35,0.56,-0.0031,0.025,-0.025
+0.01628,0.013,0.02,1.82,0.38,0.39,0.56,-0.0027,0.0211,-0.0211
+0.02533,0.02,0.032,2.39,0.32,0.44,0.55,0.0198,0.0207,-0.0207
+0.0398,0.032,0.05,3.61,0.3,0.46,0.54,-0.0166,0.0244,-0.0244
+0.06279,0.05,0.08,5.74,0.3,0.45,0.54,-0.0287,0.0284,-0.0284
+0.1008,0.08,0.13,9.1,0.3,0.45,0.53,-0.0245,0.0357,-0.0357
+0.1608,0.13,0.21,14.5,0.3,0.45,0.54,-0.1305,0.0514,-0.0514
+0.2847,0.21,1.0,28.7,0.33,0.44,0.56,-0.0564,0.0846,-0.0846
+
+#: PLAB [GeV],,,160.0
+#: RE,,,MU+ DEUT --> MU+ K+ X
+#: SYS,,,Systematic errors are estimated to be considerably smaller than statistical errors.
+X,X LOW,X HIGH,MEAN(NAME=Q**2) [GEV**2],MEAN(NAME=Y),MEAN(NAME=Z),MEAN(NAME=PT) [GEV],ASYM(C=SIVERS),error +,error -
+0.006452,0.003,0.008,1.24,0.65,0.3,0.57,-0.0281,0.03,-0.03
+0.01054,0.008,0.013,1.49,0.48,0.35,0.56,-0.009,0.0199,-0.0199
+0.01628,0.013,0.02,1.82,0.38,0.39,0.56,0.0171,0.0184,-0.0184
+0.02533,0.02,0.032,2.39,0.32,0.44,0.55,0.0383,0.0186,-0.0186
+0.0398,0.032,0.05,3.61,0.3,0.46,0.54,0.0073,0.0221,-0.0221
+0.06279,0.05,0.08,5.74,0.3,0.45,0.54,0.0126,0.0258,-0.0258
+0.1008,0.08,0.13,9.1,0.3,0.45,0.53,-0.0222,0.0325,-0.0325
+0.1608,0.13,0.21,14.5,0.3,0.45,0.54,-0.0014,0.0465,-0.0465
+0.2847,0.21,1.0,28.7,0.33,0.44,0.56,0.0158,0.0762,-0.0762
+

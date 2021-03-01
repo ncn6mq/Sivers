@@ -1,0 +1,28 @@
+#: table_doi: 10.17182/hepdata.48532.v1/t29
+#: name: Table 29
+#: description: The Collins and Sivers asymmetry as a function of PT for 'LEADING' neutral kaons from the 2002-2004 data.. Errors are statistical only.
+
+#: data_file: Table29.yaml
+#: keyword reactions: MU+ DEUT --> MU+ K0 X
+#: keyword observables: ASYM
+#: keyword phrases: Inclusive | Asymmetry Measurement | Strange production | Muon production | Neutral Current | Deep Inelastic Scattering
+#: PLAB [GeV],,,160.0
+#: RE,,,MU+ DEUT --> MU+ K0 X
+#: SYS,,,Systematic errors are estimated to be considerably smaller than statistical errors.
+PT [GEV],PT [GEV] LOW,PT [GEV] HIGH,MEAN(NAME=Q**2) [GEV**2],MEAN(NAME=Y),MEAN(NAME=X),MEAN(NAME=Z),ASYM(C=COLLINS),error +,error -
+0.2375,0.1,0.35,3.13,0.343,0.0366,0.403,0.0512,0.0413,-0.0413
+0.4474,0.35,0.55,3.21,0.356,0.0361,0.41,-0.0038,0.0432,-0.0432
+0.6424,0.55,0.75,3.25,0.37,0.0351,0.422,0.0354,0.0482,-0.0482
+0.8568,0.75,1.0,3.29,0.388,0.0337,0.436,-0.0935,0.063,-0.063
+1.2588,1.0,10.0,3.65,0.431,0.0329,0.448,0.1016,0.0809,-0.0809
+
+#: PLAB [GeV],,,160.0
+#: RE,,,MU+ DEUT --> MU+ K0 X
+#: SYS,,,Systematic errors are estimated to be considerably smaller than statistical errors.
+PT [GEV],PT [GEV] LOW,PT [GEV] HIGH,MEAN(NAME=Q**2) [GEV**2],MEAN(NAME=Y),MEAN(NAME=X),MEAN(NAME=Z),ASYM(C=SIVERS),error +,error -
+0.2375,0.1,0.35,3.13,0.343,0.0366,0.403,0.0024,0.0361,-0.0361
+0.4474,0.35,0.55,3.21,0.356,0.0361,0.41,-0.0232,0.0374,-0.0374
+0.6424,0.55,0.75,3.25,0.37,0.0351,0.422,-0.0091,0.0414,-0.0414
+0.8568,0.75,1.0,3.29,0.388,0.0337,0.436,0.0006,0.0526,-0.0526
+1.2588,1.0,10.0,3.65,0.431,0.0329,0.448,-0.1041,0.0657,-0.0657
+

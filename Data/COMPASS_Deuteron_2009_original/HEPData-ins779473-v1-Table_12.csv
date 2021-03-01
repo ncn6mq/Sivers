@@ -1,0 +1,34 @@
+#: table_doi: 10.17182/hepdata.48532.v1/t12
+#: name: Table 12
+#: description: The Collins and Sivers asymmetry as a function of Z for 'ALL' negative kaons from the 2003-2004 data.. Errors are statistical only.
+
+#: data_file: Table12.yaml
+#: keyword reactions: MU+ DEUT --> MU+ K- X
+#: keyword observables: ASYM
+#: keyword phrases: Inclusive | Asymmetry Measurement | Strange production | Muon production | Neutral Current | Deep Inelastic Scattering
+#: PLAB [GeV],,,160.0
+#: RE,,,MU+ DEUT --> MU+ K- X
+#: SYS,,,Systematic errors are estimated to be considerably smaller than statistical errors.
+Z,Z LOW,Z HIGH,MEAN(NAME=Q**2) [GEV**2],MEAN(NAME=Y),MEAN(NAME=X),MEAN(NAME=PT) [GEV],ASYM(C=COLLINS),error +,error -
+0.2248,0.2,0.25,3.65,0.51,0.026,0.51,-0.0066,0.0305,-0.0305
+0.2743,0.25,0.3,3.51,0.46,0.028,0.53,-0.0331,0.0305,-0.0305
+0.3242,0.3,0.35,3.49,0.43,0.03,0.54,0.0325,0.0315,-0.0315
+0.3742,0.35,0.4,3.35,0.4,0.032,0.56,0.0267,0.0354,-0.0354
+0.4454,0.4,0.5,3.13,0.35,0.034,0.56,-0.0462,0.0283,-0.0283
+0.5641,0.5,0.65,2.85,0.29,0.037,0.57,0.0197,0.0312,-0.0312
+0.7111,0.65,0.8,2.68,0.25,0.04,0.6,0.0751,0.0515,-0.0515
+0.8679,0.8,1.0,2.45,0.23,0.039,0.55,0.0809,0.0897,-0.0897
+
+#: PLAB [GeV],,,160.0
+#: RE,,,MU+ DEUT --> MU+ K- X
+#: SYS,,,Systematic errors are estimated to be considerably smaller than statistical errors.
+Z,Z LOW,Z HIGH,MEAN(NAME=Q**2) [GEV**2],MEAN(NAME=Y),MEAN(NAME=X),MEAN(NAME=PT) [GEV],ASYM(C=SIVERS),error +,error -
+0.2248,0.2,0.25,3.65,0.51,0.026,0.51,-0.0077,0.023,-0.023
+0.2743,0.25,0.3,3.51,0.46,0.028,0.53,-0.0229,0.0242,-0.0242
+0.3242,0.3,0.35,3.49,0.43,0.03,0.54,-0.0234,0.0256,-0.0256
+0.3742,0.35,0.4,3.35,0.4,0.032,0.56,-0.02,0.0297,-0.0297
+0.4454,0.4,0.5,3.13,0.35,0.034,0.56,-0.0326,0.0251,-0.0251
+0.5641,0.5,0.65,2.85,0.29,0.037,0.57,-0.0037,0.0291,-0.0291
+0.7111,0.65,0.8,2.68,0.25,0.04,0.6,-0.135,0.0487,-0.0487
+0.8679,0.8,1.0,2.45,0.23,0.039,0.55,0.0993,0.0868,-0.0868
+
