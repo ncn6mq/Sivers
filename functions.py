@@ -37,12 +37,12 @@ class Hadron(object):
     
     
     def A0(self, z, pht, m1):
-        ks2avg = self.kperp2avg*m1**2/(m1**2 + self.kperp2avg)
-        topfirst = (z**2 * self.kperp2avg + self.pperp2avg) * self.kperp2avg**2
-        bottomfirst = (z**2 * ks2avg + self.pperp2avg) * self.kperp2avg**2
-        exptop = pht**2 * z**2 * (ks2avg - self.kperp2avg)
-        expbottom = (z**2 * ks2avg + self.pperp2avg) * (z**2 * self.kperp2avg + self.pperp2avg)
-        last = np.sqrt(2*self.e) * z * pht / m1
+        ks2avg = (self.kperp2avg*m1**2)/(m1**2 + self.kperp2avg) #correct 
+        topfirst = (z**2 * self.kperp2avg + self.pperp2avg) * ks2avg**2 #correct
+        bottomfirst = (z**2 * ks2avg + self.pperp2avg) * self.kperp2avg**2 #correct
+        exptop = pht**2 * z**2 * (ks2avg - self.kperp2avg) #correct
+        expbottom = (z**2 * ks2avg + self.pperp2avg) * (z**2 * self.kperp2avg + self.pperp2avg) #correct
+        last = np.sqrt(2*self.e) * z * pht / m1 #correct
         
         return (topfirst/bottomfirst) * np.exp(-exptop/expbottom) * last
     
@@ -236,46 +236,52 @@ class KMinus(Hadron):
 class CombinedHadrons(object):
     def __init__(self, kperp2avg=.57, pperp2avg=.12, pdfset='JAM19PDF_proton_nlo',
              ff_kaon='JAM19FF_kaon_nlo', ff_pion='JAM19FF_pion_nlo'):
-    
-        self.pp = PiPlus(kperp2avg=kperp2avg, pperp2avg=pperp2avg, pdfset=pdfset,
-                     ff_pion=ff_pion)
-
-        self.pm = PiMinus(kperp2avg=kperp2avg, pperp2avg=pperp2avg, pdfset=pdfset,
-                     ff_pion=ff_pion)
-
-        self.pz = PiZero(kperp2avg=kperp2avg, pperp2avg=pperp2avg, pdfset=pdfset,
-                     ff_pion=ff_pion)
-
-        self.kp = KPlus(kperp2avg=kperp2avg, pperp2avg=pperp2avg, pdfset=pdfset,
+        
+        self.funcDict = {'pi+': PiPlus(kperp2avg=kperp2avg, pperp2avg=pperp2avg, pdfset=pdfset,
+                     ff_pion=ff_pion),
+                         'pi-': PiMinus(kperp2avg=kperp2avg, pperp2avg=pperp2avg, pdfset=pdfset,
+                     ff_pion=ff_pion), 
+                         'pi0': PiZero(kperp2avg=kperp2avg, pperp2avg=pperp2avg, pdfset=pdfset,
+                     ff_pion=ff_pion), 
+                         'k+': KPlus(kperp2avg=kperp2avg, pperp2avg=pperp2avg, pdfset=pdfset,
+                     ff_kaon=ff_kaon), 
+                         'k-': KMinus(kperp2avg=kperp2avg, pperp2avg=pperp2avg, pdfset=pdfset,
                      ff_kaon=ff_kaon)
-
-        self.km = KMinus(kperp2avg=kperp2avg, pperp2avg=pperp2avg, pdfset=pdfset,
-                     ff_kaon=ff_kaon)
+                     }
+        
+        self.argDict = {'pi+': ['Nu', 'au', 'bu', 'Ndbar', 'm1'],
+                        'pi-': ['Nd', 'ad', 'bd', 'Nubar', 'm1'],
+                        'pi0': ['Nu', 'au', 'bu', 'Nubar', 'm1'],
+                        'k+': ['Nu', 'au', 'bu', 'Nsbar', 'm1'],
+                        'k-': ['Ns', 'as0', 'bs', 'Nubar', 'm1']
+                       }
         
         
-    def siversAll(self, kinsandflag, Nu, Nd, Ns, Nubar, Ndbar, Nsbar, au, ad, as0, bu, bd, bs, m1):
+    def siversAll(self, kinsandflag, params):
         '''
         Calculate sivers assymetry for specified variables
         
         :param kins: numpy array w shape (n, 5) of kinematics in order of x, z, pht, QQ (kins[:, 0] = xs) and then a flag variable which contains ('pi+', 'pi-', 'pi0', 'k+', 'k-')
-        :param *: 13 free parameters of sivers functions for the various hadron functions
+        :param params: a dictionary of some combination of the 13 free parameters of sivers functions for the various hadron functions (should be labeled as: Nu, Nd, Ns, Nubar, Ndbar, Nsbar, au, ad, as0, bu, bd, bs, m1)
         
         :returns: length n array of sivers assymetries
         '''
         
         funcs = [self.pp, self.pm, self.pz, self.kp, self.km]
         
-        kinsets = []
-        for hadrn in ['pi+', 'pi-', 'pi0', 'k+', 'k-']:
-            kinsets.append(kinsandflag[kinsandflag[:, 4] == hadrn, :4])
-        
         results = []
+        for hadrn in np.unique(kinsandflag[:, 4]):
+            kins = kinsandflag[kinsandflag[:, 4] == hadrn, :4]
+            args = [params[x] for x in self.argDict[hadrn]]
+            results += list(self.funcDict[hadrn].sivers(kins, *args))
         
-        results += list(self.pp.sivers(kinsets[0], Nu, au, bu, Ndbar, m1))
-        results += list(self.pp.sivers(kinsets[1], Nd, ad, bd, Nubar, m1))
-        results += list(self.pp.sivers(kinsets[2], Nu, au, bu, Nubar, m1))
-        results += list(self.pp.sivers(kinsets[3], Nu, au, bu, Nsbar, m1))
-        results += list(self.pp.sivers(kinsets[4], Ns, as0, bs, Nubar, m1))
+        
+        
+#         results += list(self.pp.sivers(kinsets[0], Nu, au, bu, Ndbar, m1))
+#         results += list(self.pp.sivers(kinsets[1], Nd, ad, bd, Nubar, m1))
+#         results += list(self.pp.sivers(kinsets[2], Nu, au, bu, Nubar, m1))
+#         results += list(self.pp.sivers(kinsets[3], Nu, au, bu, Nsbar, m1))
+#         results += list(self.pp.sivers(kinsets[4], Ns, as0, bs, Nubar, m1))
         
         return np.array(results)
 
