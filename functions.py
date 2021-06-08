@@ -23,7 +23,7 @@ class Hadron(object):
         self.edbar = 1/3
         self.es = -1/3
         self.esbar = 1/3
-        self.e = 1/137
+        self.e = 1
     
 
     def pdf(self, flavor, x, QQ):
@@ -39,7 +39,7 @@ class Hadron(object):
     def A0(self, z, pht, m1):
         ks2avg = (self.kperp2avg*m1**2)/(m1**2 + self.kperp2avg) #correct 
         topfirst = (z**2 * self.kperp2avg + self.pperp2avg) * ks2avg**2 #correct
-        bottomfirst = (z**2 * ks2avg + self.pperp2avg) * self.kperp2avg**2 #correct
+        bottomfirst = (z**2 * ks2avg + self.pperp2avg)**2 * self.kperp2avg #correct
         exptop = pht**2 * z**2 * (ks2avg - self.kperp2avg) #correct
         expbottom = (z**2 * ks2avg + self.pperp2avg) * (z**2 * self.kperp2avg + self.pperp2avg) #correct
         last = np.sqrt(2*self.e) * z * pht / m1 #correct
@@ -191,12 +191,12 @@ class KPlus(Hadron):
         QQ = kins[:, 3]
         a0 = self.A0(z, pht, m1)
         # N_u * e_u^2 * f_u(x) * (D_k+/u(z) + D_k+/u(z))
-        topleft = self.NN(x, Nu, au, bu) * self.eu**2 * self.pdf(2, x, QQ) * self.ffKaon(2, z, QQ)
+        topleft = self.NN(x, Nu, au, bu) * self.eu**2 * self.pdf(2, x, QQ) * self.ffPion(2, z, QQ)
         # N_sbar * e_sbar^2 * f_sbar(x) * (D_k+/sbar(z) + D_k-/sbar(z))
         topright = self.NNanti(Nsbar) * self.esbar**2 * self.pdf(-3, x, QQ) * self.ffKaon(-3, z, QQ)
         # e_u^2 * f_u(x) * (D_pi+/u(z) + D_pi-/u(z))
-        bottomleft = self.eu**2 * self.pdf(2, x, QQ) * self.ffKaon(2, z, QQ)
-        # e_ubar^2 * f_ubar(x) * (D_pi+/ubar(z) + D_pi-/ubar(z))
+        bottomleft = self.eu**2 * self.pdf(2, x, QQ) * self.ffPion(2, z, QQ)
+        # e_sbar^2 * f_sbar(x) * (D_pi+/sbar(z) + D_pi-/sbar(z))
         bottomright = self.esbar**2 * self.pdf(-3, x, QQ) * self.ffKaon(-3, z, QQ)
         return a0*((topleft + topright)/(bottomleft + bottomright))
     
@@ -225,11 +225,11 @@ class KMinus(Hadron):
         # N_s * e_s^2 * f_s(x) * (D_k+/s(z) + D_k+/s(z))
         topleft = self.NN(x, Ns, as0, bs) * self.es**2 * self.pdf(3, x, QQ) * self.ffKaon(3, z, QQ)
         # N_ubar * e_ubar^2 * f_ubar(x) * (D_k+/ubar(z) + D_k-/ubar(z))
-        topright = self.NNanti(Nubar) * self.eubar**2 * self.pdf(-2, x, QQ) * self.ffKaon(-2, z, QQ)
+        topright = self.NNanti(Nubar) * self.eubar**2 * self.pdf(-2, x, QQ) * self.ffPion(-2, z, QQ)
         # e_s^2 * f_s(x) * (D_pi+/s(z) + D_pi-/s(z))
         bottomleft = self.es**2 * self.pdf(3, x, QQ) * self.ffKaon(3, z, QQ)
         # e_ubar^2 * f_ubar(x) * (D_pi+/ubar(z) + D_pi-/ubar(z))
-        bottomright = self.eubar**2 * self.pdf(-2, x, QQ) * self.ffKaon(-2, z, QQ)
+        bottomright = self.eubar**2 * self.pdf(-2, x, QQ) * self.ffPion(-2, z, QQ)
         return a0*((topleft + topright)/(bottomleft + bottomright))
     
     
@@ -257,7 +257,7 @@ class CombinedHadrons(object):
                        }
         
         
-    def siversAll(self, kinsandflag, params):
+    def siversAll(self, kinsandflag, **params):
         '''
         Calculate sivers assymetry for specified variables
         
@@ -267,47 +267,83 @@ class CombinedHadrons(object):
         :returns: length n array of sivers assymetries
         '''
         
-        funcs = [self.pp, self.pm, self.pz, self.kp, self.km]
+        #funcs = [self.pp, self.pm, self.pz, self.kp, self.km]
         
         results = []
         for hadrn in np.unique(kinsandflag[:, 4]):
-            kins = kinsandflag[kinsandflag[:, 4] == hadrn, :4]
+            kins = kinsandflag[kinsandflag[:, 4] == hadrn, :4].astype('float')
             args = [params[x] for x in self.argDict[hadrn]]
             results += list(self.funcDict[hadrn].sivers(kins, *args))
-        
-        
-        
-#         results += list(self.pp.sivers(kinsets[0], Nu, au, bu, Ndbar, m1))
-#         results += list(self.pp.sivers(kinsets[1], Nd, ad, bd, Nubar, m1))
-#         results += list(self.pp.sivers(kinsets[2], Nu, au, bu, Nubar, m1))
-#         results += list(self.pp.sivers(kinsets[3], Nu, au, bu, Nsbar, m1))
-#         results += list(self.pp.sivers(kinsets[4], Ns, as0, bs, Nubar, m1))
         
         return np.array(results)
 
    
-    def siversPions(self, kinsandflag, Nu, Nd, Nubar, Ndbar, au, ad, bu, bd, m1):
-        '''
-        Calculate sivers assymetry for specified variables
+#      def siversAllCurveFitFactory(self, kinsandflag, **kwargs):
         
-        :param kins: numpy array w shape (n, 5) of kinematics in order of x, z, pht, QQ (kins[:, 0] = xs) and then a flag variable which contains ('pi+', 'pi-', 'pi0')
-        :param *: 9 free parameters of sivers functions for the various hadron functions
+#          args = kwargs.keys()
         
-        :returns: length n array of sivers assymetries
-        '''
+#          l1 = 'def siversAllCurveFit(kins, ' + ', '.join(args) + '):\r'
+#          l2 = '    '
         
-        funcs = [self.pp, self.pm, self.pz]
+#          exec()
+
+
+    def siversAllCurveFit(self, kinsandflag, Nu, Nd, Ns, Nubar, Ndbar, Nsbar, au, ad, as0, bu, bd, bs, m1):
+        res = []
+        kinspp = kinsandflag[kinsandflag[:, 4] == 'pi+', :4].astype('float') 
+        res += list(self.funcDict['pi+'].sivers(kinspp, Nu, au, bu, Ndbar, m1))
+        kinspm = kinsandflag[kinsandflag[:, 4] == 'pi-', :4].astype('float') 
+        res += list(self.funcDict['pi-'].sivers(kinspm, Nd, ad, bd, Nubar, m1))
+        kinsp0 = kinsandflag[kinsandflag[:, 4] == 'pi0', :4].astype('float') 
+        res += list(self.funcDict['pi0'].sivers(kinsp0, Nu, au, bu, Nubar, m1))
+        kinskp = kinsandflag[kinsandflag[:, 4] == 'k+', :4].astype('float') 
+        res += list(self.funcDict['k+'].sivers(kinskp, Nu, au, bu, Nsbar, m1))
+        kinskm = kinsandflag[kinsandflag[:, 4] == 'k-', :4].astype('float') 
+        res += list(self.funcDict['k-'].sivers(kinskm, Ns, as0, bs, Nubar, m1))
         
-        kinsets = []
-        for hadrn in ['pi+', 'pi-', 'pi0', 'k+', 'k-']:
-            kinsets.append(kinsandflag[kinsandflag[:, 4] == i, :4])
+        return np.array(res)
+    
+    
+    def siversPionCurveFit(self, kinsandflag, Nu, Nd, Nubar, Ndbar, au, ad, bu, bd, m1):
+    
+        res = []
+        kinspp = kinsandflag[kinsandflag[4] == 'pi+', :4].astype('float') 
+        res.append(self.funcDict['pi+'].sivers(kinspp, Nu, au, bu, Ndbar, m1))
+        kinspm = kinsandflag[kinsandflag[4] == 'pi-', :4].astype('float') 
+        res.append(self.funcDict['pi-'].sivers(kinspm, Nd, ad, bd, Nubar, m1))
+        kinsp0 = kinsandflag[kinsandflag[4] == 'pi0', :4].astype('float') 
+        res.append(self.funcDict['pi0'].sivers(kinsp0, Nu, au, bu, Nubar, m1))
         
-        results = []
+        return np.array(res)
+    
+    def siversAllCurveFitFactorized(self, kinsandflag, Nu, Nd, Ns, Nubar, Ndbar, Nsbar, au, ad, as0, bu, bd, bs, m1):
+
+        res = []
+        kinspp = kinsandflag[kinsandflag[:, 4] == 0, :4]
+        res += list(self.funcDict['pi+'].sivers(kinspp, Nu, au, bu, Ndbar, m1))
+        kinspm = kinsandflag[kinsandflag[:, 4] == 1, :4] 
+        res += list(self.funcDict['pi-'].sivers(kinspm, Nd, ad, bd, Nubar, m1))
+        kinsp0 = kinsandflag[kinsandflag[:, 4] == 2, :4] 
+        res += list(self.funcDict['pi0'].sivers(kinsp0, Nu, au, bu, Nubar, m1))
+        kinskp = kinsandflag[kinsandflag[:, 4] == 3, :4] 
+        res += list(self.funcDict['k+'].sivers(kinskp, Nu, au, bu, Nsbar, m1))
+        kinskm = kinsandflag[kinsandflag[:, 4] == 4, :4] 
+        res += list(self.funcDict['k-'].sivers(kinskm, Ns, as0, bs, Nubar, m1))
         
-        results += list(self.pp.sivers(kinsets[0], Nu, au, bu, Ndbar, m1))
-        results += list(self.pp.sivers(kinsets[1], Nd, ad, bd, Nubar, m1))
-        results += list(self.pp.sivers(kinsets[2], Nu, au, bu, Nubar, m1))
+        return np.array(res)
+    
+    def siversAllCurveFitFactorizeds0(self, kinsandflag, Nu, Nd, Nubar, Ndbar, au, ad, bu, bd, m1):
+
+        res = []
+        kinspp = kinsandflag[kinsandflag[:, 4] == 0, :4]
+        res += list(self.funcDict['pi+'].sivers(kinspp, Nu, au, bu, Ndbar, m1))
+        kinspm = kinsandflag[kinsandflag[:, 4] == 1, :4] 
+        res += list(self.funcDict['pi-'].sivers(kinspm, Nd, ad, bd, Nubar, m1))
+        kinsp0 = kinsandflag[kinsandflag[:, 4] == 2, :4] 
+        res += list(self.funcDict['pi0'].sivers(kinsp0, Nu, au, bu, Nubar, m1))
+        kinskp = kinsandflag[kinsandflag[:, 4] == 3, :4] 
+        res += list(self.funcDict['k+'].sivers(kinskp, Nu, au, bu, 0, m1))
+        kinskm = kinsandflag[kinsandflag[:, 4] == 4, :4] 
+        res += list(self.funcDict['k-'].sivers(kinskm, 0, 0, 0, Nubar, m1))
         
-        return np.array(results)
-        
- 
+        return np.array(res)
