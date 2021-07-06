@@ -42,7 +42,7 @@ def totalchi2Minuit(m1,Nu,alphau,betau,Nubar,Nd,alphad,betad,Ndbar,Ns,alphas,bet
 
 m = Minuit(totalchi2Minuit,m1=SA.M1_t2,Nu=SA.NU_t2,alphau=SA.AlphaU_t2,betau=SA.BetaU_t2,Nubar=SA.NUbar_t2,Nd=SA.ND_t2,alphad=SA.AlphaD_t2,betad=SA.BetaD_t2,Ndbar=SA.NDbar_t2,Ns=SA.NS_t2,alphas=SA.AlphaS_t2,betas=SA.BetaS_t2,Nsbar=SA.NSbar_t2)
 
-
+m.limits=((3.3,4.42),(.399,.527),(1.89,2.57),(10.1,14.15),(-0.089,-0.005),(-2.65,-1.73),(1.64,1.8),(1.8,3.4),(-.87,-.59),(2.65,3.85),(.16,.32),(0.00119,0.00199),(-.4,1.2))
 
 m.migrad()
 
